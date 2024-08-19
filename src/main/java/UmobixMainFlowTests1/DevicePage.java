@@ -1,4 +1,4 @@
-package UmobixTest.mainFlowTests;
+package UmobixMainFlowTests1;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -6,14 +6,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Collections;
+import java.util.List;
+
 public class DevicePage extends BasePage {
 
-    private static final String path = "/devices.html";
-
-    public static String returnPath(){
-        return path;
-
-    }
+    protected static final String path = "/devices.html"; //Изменено на протектед потому что метод BasePAge.getFullURL раотает с нестатчиными данными, PricesPage.path был private static
     private static final By deviceH3 = By.cssSelector(".choose-platform-title");
     private static final By androidButton = By.cssSelector("[data-localstorege-device=android]");
     private static final By iosButton = By.cssSelector("[data-localstorege-device=ios]");
@@ -23,23 +21,34 @@ public class DevicePage extends BasePage {
         super(driver, wait);
     }
 
+    @Override
+    List<String> getPaths() {
+        return Collections.singletonList(path);
+    }
 
-    public void isDeviceH3TitleVisible() {
+//    @Override
+//    String getPath() {
+//        return path;
+//    }
+
+
+    public WebElement checkDeviceH3TitleVisible() {
         WebElement deviceH3 = driver.findElement(DevicePage.deviceH3);
         deviceH3.isDisplayed();
+        return deviceH3;
     }
 
-    public void isAndroidButtonVisible() {
+    public boolean isAndroidButtonVisible() {
         WebElement androidButton = driver.findElement(DevicePage.androidButton);
-        androidButton.isDisplayed();
+        return androidButton.isDisplayed();
     }
 
-    public void isIosButtonVisible() {
+    public boolean isIosButtonVisible() {
         WebElement iosButton = driver.findElement(DevicePage.iosButton);
-        iosButton.isDisplayed();
+        return iosButton.isDisplayed();
     }
 
-    public WebElement isAndroidButtonTextCorrect() {
+    public WebElement checkAndroidButtonTextCorrect() {
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(androidButton));
         WebElement androidButton = driver.findElement(DevicePage.androidButton);
         return androidButton;
@@ -51,11 +60,15 @@ public class DevicePage extends BasePage {
         return iosButton;
 
     }
-    public void isDevicesButtonClickable(String deviceType) {
-        //driver.get(BasePage.getFullURL(DevicePage.path));
+    public boolean isDevicesButtonClickable(String deviceType) {
         String devicesButton = String.format(DevicePage.deviceButton, deviceType);
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath(devicesButton)));
         WebElement buttons = driver.findElement(By.xpath(devicesButton));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(devicesButton)));
         buttons.click();
+        return true;
+    }
+    public String compareEmailUrl() {
+        return getFullURL();
     }
 }

@@ -1,4 +1,4 @@
-package UmobixTest.mainFlowTests;
+package UmobixMainFlowTests1;
 
 import java.util.Random;
 
@@ -11,6 +11,9 @@ public class randomEmailGeneration {
     public randomEmailGeneration(int randomEmailPartLegth) {
         this.randomEmailPartLength = randomEmailPartLegth;
 
+    }
+    public String getDomain(){
+        return domain;
     }
 
     public String GenerateEmail() {

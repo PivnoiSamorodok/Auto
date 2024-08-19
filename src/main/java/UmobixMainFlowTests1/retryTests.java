@@ -1,4 +1,4 @@
-package UmobixTest.mainFlowTests;
+package UmobixMainFlowTests1;
 
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;

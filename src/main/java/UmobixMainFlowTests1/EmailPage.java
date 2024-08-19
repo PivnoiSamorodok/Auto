@@ -1,4 +1,4 @@
-package UmobixTest.mainFlowTests;
+package UmobixMainFlowTests1;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -6,15 +6,22 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Collections;
+import java.util.List;
+
 public class EmailPage extends BasePage {
 
     private static final String path = "/email.html";
 
     private static final By emailInputSelector = By.cssSelector("#tryNowEmail");
-    private static final By emailButtonSelector = By.cssSelector("#tryStep > div > form > button");
+    private static final By emailButtonSelector = By.cssSelector("button.button--primary");
 
     public EmailPage(WebDriver driver, WebDriverWait wait) {
         super(driver, wait);
+    }
+    @Override
+    List<String> getPaths() {
+        return Collections.singletonList(path);
     }
 
     public boolean checkEmailInputVisibility() {
@@ -23,32 +30,36 @@ public class EmailPage extends BasePage {
         return true;
     }
 
-    public String isEmailPlaceholderCorrect() {
+    public String checkEmailPlaceholderCorrection() {
         WebElement emailInput = driver.findElement(emailInputSelector);
         String placeholder = emailInput.getAttribute("placeholder");
         return placeholder;
     }
 
-    public void checkEmailValueInput() {
+    public String checkEmailValueInput() {
         WebElement emailInput = driver.findElement(emailInputSelector);
         randomEmailGeneration rndEmail = new randomEmailGeneration(5);
         String randomEmail = rndEmail.GenerateEmail();
         emailInput.sendKeys(randomEmail);
+        return  randomEmail;
     }
 
-    public WebElement isEmailButtonVisible() {
+    public boolean isEmailButtonVisible() {
         WebElement emailButton = driver.findElement(emailButtonSelector);
-        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#tryStep > div > form > button")));
+        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(emailButtonSelector));
         emailButton.isDisplayed();
-        return emailButton;
+        return true;
     }
 
 
-    public void isEmailButtonClickable(WebElement emailButton) {
+    public void clickabilityOfEmailButton() {
+        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(emailButtonSelector));
+        WebElement emailButton = driver.findElement(emailButtonSelector);
         emailButton.click();
     }
 
-    public boolean CompareDeviceURl(String actualURL) {
-        return actualURL.contains(DevicePage.returnPath());
+    public String compareEmailUrl() {
+        return getFullURL();
     }
+
 }
