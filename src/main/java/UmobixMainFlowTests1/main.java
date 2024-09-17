@@ -217,6 +217,20 @@ public class main {
         Assert.assertEquals(oneTryNow.getText(), "TRY NOW");
 
     }
+    @DataProvider(name = "SubscriptionValue")
+    public Object[][] SubscriptionValue(){
+        return new Object[][]{
+                {"49.99"},
+                {"29.99"},
+                {"12.49"}
+        };
+    }
+
+    @Test (dataProvider = "SubscriptionValue", dependsOnMethods = "pricesOneMonthTryNowButtonCorrectText")
+    public void subscriptionPricesVisibility(String price){
+        boolean isVisible = PricesPage.isPriceVisible(price);
+        Assert.assertTrue(isVisible, "Expected price doesnt visible");
+    }
 
     @DataProvider(name = "subscriptionsTypes")
     public Object[][] subscriptionsTypes() {
@@ -227,9 +241,9 @@ public class main {
         };
     }
 
-    @Test(dataProvider = "subscriptionsTypes", dependsOnMethods = {"pricesOneMonthTryNowButtonCorrectText"})
+    @Test(dataProvider = "subscriptionsTypes", dependsOnMethods = {"subscriptionPricesVisibility"})
     public void tryNowSubButtonClick(String subscriptionsTypes) {
-        driver.get("https://umobix.com/prices.html");
+        //driver.get("https://umobix.com/prices.html");
         String currentURL = driver.getCurrentUrl();
         boolean isClickable = PricesPage.isTryNowButtonClickable(subscriptionsTypes);
         Assert.assertTrue(isClickable, "Button for subscription type " + subscriptionsTypes + "isn't clickable");
@@ -243,8 +257,8 @@ public class main {
     public void checkoutURLCompare() {
         boolean checkoutURL = PricesPage.isCheckoutURLCorrect();
         Assert.assertTrue(checkoutURL, "Checkout URL doesnt have expected part");
-
     }
+
 
 //12
 }

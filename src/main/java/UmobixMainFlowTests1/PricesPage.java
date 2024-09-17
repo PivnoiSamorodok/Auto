@@ -23,6 +23,7 @@ public class PricesPage extends BasePage {
     private static final By oneTryNow = By.xpath("/html/body/div[4]/main/section/div[1]/form[3]/button");
     private static final String buttonProduct = "//div[@class='prices-plans']//input[contains(@value,'%s')]/parent::form/button";
     private String urlPattern = "https://checkout.umobix.com/en/FR/cart/(um_mf1_50|um_mf3_90|um_mf12_150)/umobix.*";
+    private String subscriptionPriceAbsolute = "//div[contains(@class,'price-plan-card__price')] /text()[normalize-space(.)='%s']";
     public PricesPage(WebDriver driver, WebDriverWait wait) {
         super(driver, wait);
     }
@@ -31,7 +32,6 @@ public class PricesPage extends BasePage {
     List<String> getPaths() {
         return Arrays.asList(path1,path2);
     }
-
 
     public boolean compareURL() {
         String currentURL = driver.getCurrentUrl();
@@ -120,6 +120,14 @@ public class PricesPage extends BasePage {
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath(buttonProduct)));
         WebElement tryNowButton = driver.findElement(By.xpath(buttonProduct));
         tryNowButton.click();
+        return true;
+    }
+
+    public boolean isPriceVisible(String value){
+        String formattedPrice = String.format(subscriptionPriceAbsolute, value);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(formattedPrice)));
+        WebElement price = driver.findElement(By.xpath(formattedPrice));
+        price.isDisplayed();
         return true;
     }
 
